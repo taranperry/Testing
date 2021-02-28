@@ -23,3 +23,16 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+const { MailSlurp } = require("mailslurp-client");
+
+const apiKey = "43841e88ae06581da7d9591640f8bd9535cc41462b4c9056daf903a2d6282fd1";
+
+const mailslurp = new MailSlurp({ apiKey });
+
+Cypress.Commands.add("createInbox", () => {
+    return mailslurp.createInbox();
+  });
+  
+  Cypress.Commands.add("waitForLatestEmail", (inboxId) => {
+    return mailslurp.waitForLatestEmail(inboxId);
+  });

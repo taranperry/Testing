@@ -4,7 +4,8 @@
   "description": "- [git](https://github.com/git-guides/install-git) \r To clone this project run \r  git clone https://github.com/taranperry/Testing.git",
   "main": "index.js",
   "dependencies": {
-    "cypress": "^6.5.0"
+    "cypress": "^6.5.0",
+    "mailslurp-client": "^8.9.1"
   },
   "devDependencies": {},
   "scripts": {
