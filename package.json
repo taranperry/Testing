@@ -1,0 +1,23 @@
+{
+  "name": "cypresstesting",
+  "version": "1.0.0",
+  "description": "- [git](https://github.com/git-guides/install-git) \r To clone this project run \r  git clone https://github.com/taranperry/Testing.git",
+  "main": "index.js",
+  "dependencies": {
+    "cypress": "^6.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taranperry/Testing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taranperry/Testing/issues"
+  },
+  "homepage": "https://github.com/taranperry/Testing#readme"
+}
