@@ -1,13 +1,32 @@
 describe('Buy gift card', () => {
 
     const amount = '50';
-    const email = 'fake@email.com';
+    //const email = 'fake@email.com';
     const firstName = 'Name1';
     const lastName = 'Name2';
     const cardZip = 92606;
     const cardNumber = '4111 1111 1111 1111';
     const cardExpiry ='12/22';
     const cardSecurity = '999';
+
+    let inboxId;
+    let emailAddress;
+
+it("can generate a new email address", () => {
+  // see commands.js custom commands
+  cy.createInbox().then((inbox) => {
+    // verify a new inbox was created
+    assert.isDefined(inbox);
+
+    // save the inboxId for later checking the emails
+    inboxId = inbox.id;
+    emailAddress = inbox.emailAddress;
+
+    cy.wait(5000)
+
+
+  });
+});
 
     it('Can add gift card details' , () => {
 
@@ -16,7 +35,7 @@ describe('Buy gift card', () => {
     cy.get('[data-target="amount.optionButton"]').contains(amount).click()
 
     //enter contact details and click checkout button
-    cy.get('[data-target="email.purchaserEmailInput"]').type(email)
+    cy.get('[data-target="email.purchaserEmailInput"]').type(emailAddress)
     cy.get('[data-target="name.purchaserFirstNameInput"]').type(firstName)
     cy.get('[data-target="name.purchaserLastNameInput"]').type(lastName)
     
@@ -31,8 +50,8 @@ describe('Buy gift card', () => {
     //check expected purchase details displayed and click confirm button
     
     cy.get('[data-target="confirm.totalSpan"]').contains(amount)
-    cy.get('[data-target="confirm.purchaserEmailSpan"]').contains(email)
-    cy.get('[data-target="confirm.recipientEmailSpan"]').contains(email)
+    cy.get('[data-target="confirm.purchaserEmailSpan"]').contains(emailAddress)
+    cy.get('[data-target="confirm.recipientEmailSpan"]').contains(emailAddress)
     cy.get('[data-action="confirm#confirmAction"]').should('be.visible').click()
 
 }),
@@ -86,5 +105,15 @@ describe('Buy gift card', () => {
 
  
    })
+
+it("Confirmation email received", () => {
+  // wait for an email in the inbox
+  cy.waitForLatestEmail(inboxId).then((email) => {
+    // verify we received an email
+    assert.isDefined(email);
+   
+  });
+});
+
 })
      
