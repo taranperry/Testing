@@ -1,39 +1,49 @@
-describe('Practice buy gift card', () => {
+describe('Buy gift card', () => {
 
-    it('first test' , () => {
-    
+    const amount = '50';
+    const email = 'fake@email.com';
+    const firstName = 'Name1';
+    const lastName = 'Name2';
+    const cardZip = 92606;
+    const cardNumber = '4111 1111 1111 1111';
+    const cardExpiry ='12/22';
+    const cardSecurity = '999';
+
+    it('Can add gift card details' , () => {
+
     cy.visit('https://gift-cards.phorest.com/salons/demo-us')
-    //check can use commands.js to call this page similar to login
 
-    cy.get('[data-target="amount.optionButton"]').contains('50').click()
+    cy.get('[data-target="amount.optionButton"]').contains(amount).click()
 
-    //enter contact details - update to remove hard coding here 
-    cy.get('[data-target="email.purchaserEmailInput"]').type('fake@email.com')
-    cy.get('[data-target="name.purchaserFirstNameInput"]').type('name1')
-    cy.get('[data-target="name.purchaserLastNameInput"]').type('name2')
+    //enter contact details and click checkout button
+    cy.get('[data-target="email.purchaserEmailInput"]').type(email)
+    cy.get('[data-target="name.purchaserFirstNameInput"]').type(firstName)
+    cy.get('[data-target="name.purchaserLastNameInput"]').type(lastName)
     
-    //check expected gift card value displayed - issues with this one see if there is a better alternative to using .w-btn
-    //ran into some isues where this wasnt visible did some googling around this
-    cy.get('.w-btn [data-target= "checkout.checkoutButton"][data-action="checkout#checkoutAction"]').should('be.visible').click()
-    
-    //check Summary page loaded
+    cy.get('.w-btn [data-target= "checkout.checkoutButton"][data-action="checkout#checkoutAction"]')
+    .should('be.visible').click()
+
+    }),
+
+    it('Can view confirmation details' , () => {
 
     cy.url().should('include','#confirm')
-
-    //check expected purchase details displayed
+    //check expected purchase details displayed and click confirm button
     
-    cy.get('[data-target="confirm.totalSpan"]').contains('$50')
-    cy.get('[data-target="confirm.purchaserEmailSpan"]').contains('fake@email.com')
-    cy.get('[data-target="confirm.recipientEmailSpan"]').contains('fake@email.com')
-    
-    //select confirm button
-    
+    cy.get('[data-target="confirm.totalSpan"]').contains(amount)
+    cy.get('[data-target="confirm.purchaserEmailSpan"]').contains(email)
+    cy.get('[data-target="confirm.recipientEmailSpan"]').contains(email)
     cy.get('[data-action="confirm#confirmAction"]').should('be.visible').click()
+
+}),
+
+    it('Can view and enter payment details' , () => {
 
     cy.url().should('include','#payment')
     cy.wait(5000)
 
-    //https://www.cypress.io/blog/2020/02/12/working-with-iframes-in-cypress/
+    //interact with iframe to enter card deatils
+    //see https://www.cypress.io/blog/2020/02/12/working-with-iframes-in-cypress/
 
     const getIframeDocument = () => {
         return cy
@@ -60,22 +70,21 @@ describe('Practice buy gift card', () => {
         cy.wait(5000)
       }
 
-       getIframeBody().find('[name="cardName"]').should('be.visible').type('Name 1 Name2')
-       getIframeBody().find('[name="cardZip"]').type('92606')
-       getIframeBody().find('[name="cardNumber"]').type('4111 1111 1111 1111')
-       getIframeBody().find('[name="cardExpiry"]').type('12/22')
-       getIframeBody().find('[name="cardSecurity"]').type('999')
+       getIframeBody().find('[name="cardName"]').should('be.visible').type(`${firstName} ${lastName}`)
+       getIframeBody().find('[name="cardZip"]').type(cardZip)
+       getIframeBody().find('[name="cardNumber"]').type(cardNumber)
+       getIframeBody().find('[name="cardExpiry"]').type(cardExpiry)
+       getIframeBody().find('[name="cardSecurity"]').type(cardSecurity)
        getIframeBody().contains('Submit').click()
 
+    }),
+
+    it('Can view purchase success details' , () => {
+
        cy.url().should('include','#success')
-
-       cy.contains('$50')
-
-
-
+       cy.contains(amount)
 
  
-    
    })
 })
      
